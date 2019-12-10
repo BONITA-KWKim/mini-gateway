@@ -49,12 +49,6 @@ Temporary Items
 *.mod
 *.smod
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
 # Executables
 *.exe
 *.out
@@ -62,4 +56,5 @@ Temporary Items
 
 ## cmake
 # no included directories
-build
+build/
+spark/
