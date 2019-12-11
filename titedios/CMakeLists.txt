@@ -22,8 +22,15 @@ set (PROXY_INC ${CMAKE_CURRENT_SOURCE_DIR}/gw-proxy/include)
 set (PROXY_SRC ${CMAKE_CURRENT_SOURCE_DIR}/gw-proxy/src)
 set (PROXY_SRC_TEST_FILES ${PROXY_SRC}/test_proxy.cc)
 set (PROXY_SRC_FILES ${PROXY_SRC}/proxy.cc)
-add_executable (mini_gw_proxy_test ${PROXY_SRC_TEST_FILES}) # test
+## unit test
+add_executable (mini_gw_proxy_test ${PROXY_SRC_TEST_FILES}) 
 target_include_directories (mini_gw_proxy_test PUBLIC ${PROXY_INC})
 target_link_libraries (mini_gw_proxy_test gtest)
-add_executable (mini_gw_proxy ${PROXY_SRC_FILES}) # operating
+## operating
+add_executable (mini_gw_proxy ${PROXY_SRC_FILES}) 
 target_include_directories (mini_gw_proxy PUBLIC ${PROXY_INC})
+target_link_libraries (mini_gw_proxy pthread)
+## test client
+set (PROXY_SRC_TEST_CLIENT ${PROXY_SRC}/test_client.cc)
+add_executable (mini_gw_proxy_test_client ${PROXY_SRC_TEST_CLIENT})
+target_link_libraries (mini_gw_proxy_test_client pthread)
