@@ -56,5 +56,6 @@ Temporary Items
 
 ## cmake
 # no included directories
+bin/
 build/
 spark/
