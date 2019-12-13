@@ -9,8 +9,7 @@ int main(int argc, char *argv[])
     else if (0 > result) return -1;
 
     /* get configuration */
-    get_config("/Users/mts.dev/Documents/Bonita.E/workspace/Docker/"\
-        "mini-gateway/titedios/gw-proxy/config/proxy.conf");
+    get_config("./config/proxy.conf");
 
     // check environment value
     for(auto it = proxy_env.cbegin(); it != proxy_env.cend(); ++it) {

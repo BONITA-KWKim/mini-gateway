@@ -7,3 +7,6 @@
 *.markdown
 !README*.md
 README-secret.md
+
+#
+build/
