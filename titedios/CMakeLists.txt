@@ -34,3 +34,6 @@ target_link_libraries (mini_gw_proxy pthread)
 set (PROXY_SRC_TEST_CLIENT ${PROXY_SRC}/test_client.cc)
 add_executable (mini_gw_proxy_test_client ${PROXY_SRC_TEST_CLIENT})
 target_link_libraries (mini_gw_proxy_test_client pthread)
+## installation
+install (TARGETS mini_gw_proxy mini_gw_proxy_test_client mini_gw_proxy_test 
+         RUNTIME DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/gw-proxy/bin)
