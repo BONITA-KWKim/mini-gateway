@@ -1,9 +1,11 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.5.1)
 project ("Internal API server")
-message (${CMAKE_PROJECT_NAME})
-message ("Internal API server")
 
-add_definitions (-std=c++11)
+if (NOT MSVC)
+  add_definitions (-std=c++11)
+else ()
+  add_definitions (-D_WIN32_WINNT=0x600)
+endif()
 
 # interal API server
 set (IAS_INC ${CMAKE_CURRENT_SOURCE_DIR}/include)

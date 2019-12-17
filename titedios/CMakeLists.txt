@@ -1,6 +1,5 @@
-cmake_minimum_required (VERSION 2.8)
+cmake_minimum_required (VERSION 3.5.1)
 project (mini_gateway)
-message (${CMAKE_PROJECT_NAME})
 
 add_definitions (-std=c++11)
 
