@@ -9,7 +9,9 @@
 README-secret.md
 
 #
-build/
-docs/
-spark/
-third-party/
+**/bin
+**/build
+**/docs
+spark
+**/third-party/json
+**/third-party/grpc

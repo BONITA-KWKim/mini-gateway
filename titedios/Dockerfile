@@ -9,11 +9,8 @@ RUN mkdir -p /opt/services/mini-gateway
 
 # copy our project code
 WORKDIR /opt/services/mini-gateway
-RUN mkdir include
-COPY ./include ./include
-RUN mkdir library
-COPY ./library ./library
-
+RUN mkdir -p third-party/googletest
+COPY ./third-party/googletest ./third-party/googletest
 
 # ========== mini gateway proxy server ==========
 FROM mini_gw_base AS mini_gw_proxy
