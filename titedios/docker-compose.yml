@@ -15,4 +15,21 @@ services:
       target: mini_gw_internal_API
     container_name: mini_gw_internal_API
     command:
-        - /opt/services/mini-gw-proxy/internal-API-entrypoint.sh
+        - /opt/services/mini-gateway/internal_API_server/internal-API-entrypoint.sh
+    ipc: host
+    volumes:
+      - shared_volume:/opt/services/mini-gateway/shared
+
+  mini_gw_vendor_kakao:
+    build: 
+      context: .
+      target: mini_gw_vendor_kakao
+    container_name: mini_gw_vendor_kakao
+    command:
+        - /opt/services/mini-gateway/vendor-kakao/kakao-entrypoint.sh
+    ipc: host
+    volumes:
+      - shared_volume:/opt/services/mini-gateway/shared
+    
+volumes:
+  shared_volume:

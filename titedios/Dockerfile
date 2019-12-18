@@ -5,7 +5,7 @@ FROM alpine:3.10 AS mini_gw_base
 RUN apk add cmake build-base
 
 # create directory
-RUN mkdir -p /opt/services/mini-gateway
+RUN mkdir -p /opt/services/mini-gateway/shared
 
 # copy our project code
 WORKDIR /opt/services/mini-gateway
@@ -41,5 +41,21 @@ WORKDIR /opt/services/mini-gateway/internal_API_server
 # copy our project code
 COPY ./internal-API-server .
 
-RUN ["chmod", "+x", "./internal-API-entrypoint.sh"]
-ENTRYPOINT ["sh", "./internal-API-entrypoint.sh"] 
+#RUN ["chmod", "+x", "./internal-API-entrypoint.sh"]
+#ENTRYPOINT ["sh", "./internal-API-entrypoint.sh"] 
+
+# ========== mini gateway internal API server ==========
+FROM mini_gw_base AS mini_gw_vendor_kakao
+
+# install dependancies
+#RUN apk add cmake build-base
+
+# create directory
+RUN mkdir -p /opt/services/mini-gateway/vendor-kakao
+WORKDIR /opt/services/mini-gateway/vendor-kakao
+
+# copy our project code
+COPY ./vendor-kakao .
+
+RUN ["chmod", "+x", "./kakao-entrypoint.sh"]
+ENTRYPOINT ["sh", "./kakao-entrypoint.sh"] 
