@@ -8,24 +8,31 @@ else ()
 endif()
 
 # interal API server
+set (COMMON_INC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
+set (COMMON_LIB ${CMAKE_CURRENT_SOURCE_DIR}/../library)
 set (IAS_INC ${CMAKE_CURRENT_SOURCE_DIR}/include)
-set (IAS_LIB ${CMAKE_CURRENT_SOURCE_DIR}/library)
 set (IAS_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set (IAS_BIN ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
-## operating
+include_directories (${COMMON_INC} ${IAS_INC})
+link_directories (${COMMON_LIB})
+
+## ========== unit test ==========
+enable_testing()
+set (IAS_SRC_TEST_FILES ${IAS_SRC}/test_internal_API_server.cc)
+add_executable (test_internal_API_server ${IAS_SRC_TEST_FILES}) 
+find_library(GOOGLETEST_LIBRARY gtest gtest_main)
+target_link_libraries(test_internal_API_server PUBLIC ${GOOGLETEST_LIBRARY})
+add_test (NAME ias_unit_test
+          COMMAND test_internal_API_server
+          WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
+
+## ========== operating ==========
 set (IAS_SRC_FILES ${IAS_SRC}/internal_API_server.cc)
 add_executable (internal_API_server ${IAS_SRC_FILES}) 
-target_include_directories (internal_API_server PUBLIC ${IAS_INC})
 target_link_libraries (internal_API_server pthread)
 
-## TARGETS
-set (TEST_IAS_SRC_FILES ${IAS_SRC}/test_internal_API_server.cc)
-add_executable (test_internal_API_server ${TEST_IAS_SRC_FILES}) 
-target_include_directories (test_internal_API_server PUBLIC ${IAS_INC})
-target_link_directories (test_internal_API_server PUBLIC ${IAS_LIB})
-target_link_libraries (test_internal_API_server gtest)
-
-## installation
-install (TARGETS internal_API_server test_internal_API_server
-         RUNTIME DESTINATION ${IAS_BIN})
+## ========== start proxy ==========
+add_custom_target (start_ias
+                   COMMAND internal_API_server
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+                   DEPENDS internal_API_server)

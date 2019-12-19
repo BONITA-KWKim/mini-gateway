@@ -5,6 +5,7 @@
 extern "C"{
 #endif
 
+// ========== Header ==========
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -20,9 +21,12 @@ extern "C"{
 #include <pthread.h>
 #include <errno.h>
 
+// ========== JSON ==========
 #include "nlohmann/json.hpp"
 using json = nlohmann::json;
 
+
+// ========== definition ==========
 #define MAX_PACKET_BUFF_SIZE 4096
 
 int gLoglevel = 0;

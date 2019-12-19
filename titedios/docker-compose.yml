@@ -7,7 +7,7 @@ services:
       target: mini_gw_proxy
     container_name: mini_gw_proxy
     command:
-      - /opt/services/mini-gw-proxy/proxy-entrypoint.sh
+      - /opt/services/mini-gateway/proxy/proxy-entrypoint.sh
 
   mini_gw_internal_api:
     build: 
