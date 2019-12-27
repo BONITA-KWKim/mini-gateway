@@ -8,6 +8,7 @@ Mini gateway is a bridge for connecting a system to others. Specifically, this g
 Docker
 CPP
 googletest
+gRPC
 
 ## Reference
 ### install GoogleTest
