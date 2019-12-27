@@ -1,12 +1,13 @@
 # ========== mini gateway base ==========
-FROM alpine:3.10 AS mini_gw_base
+FROM debian:stretch AS mini_gw_base
+
+LABEL maintaner "kyungwon.KIM <kyungwon9010@gmail.com>"
 
 # install dependancies
-RUN apk add cmake build-base git curl
-# gRPC
-RUN apk add autoconf libtool pkgconfig go
-#RUN apk add libgflags-dev libgtest-dev
-#RUN apk add clang-5.0 libc++-dev
+RUN apt-get update && apt-get install -y \
+  build-essential autoconf git pkg-config \
+  automake libtool curl make g++ unzip \
+  && apt-get clean
 
 # create directory
 RUN mkdir -p /opt/services/mini-gateway/shared
@@ -18,9 +19,32 @@ RUN mkdir library
 COPY ./include ./include
 COPY ./library ./library
 
-# copy third party
-RUN mkdir -p third-party/
-COPY ./third-party/ ./third-party/
+# install gRPC
+# install protobuf first, then grpc
+RUN mkdir -p /opt/services/mini-gateway/third-party/grpc
+ENV GRPC_RELEASE_TAG v1.10.x
+RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /opt/services/mini-gateway/third-party/grac && \
+		cd /opt/services/mini-gateway/third-party/grac && \
+    git submodule update --init && \
+    echo "--- installing protobuf ---" && \
+    cd third_party/protobuf && \
+    ./autogen.sh && ./configure --enable-shared && \
+    make -j$(nproc) && make -j$(nproc) check && make install && make clean && ldconfig && \
+    echo "--- installing grpc ---" && \
+    cd /opt/services/mini-gateway/third-party/grac && \
+    make -j$(nproc) && make install && make clean && ldconfig 
+    # && \ 
+    # rm -rf /opt/services/mini-gateway/third-party/grpc
+
+# install googletest
+RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
+RUN git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc.git /opt/services/mini-gateway/third-party/googletest && \
+        cd /opt/services/mini-gateway/third-party/googletest && \ 
+    echo "--- installing googletest ---" && \
+    mkdir build && \
+    cmake -Bbuild -H. && \
+    cmake --build build --target install && \
+    rm -rf /opt/services/mini-gateway/third-party/googletest
 
 # install third party
 COPY ./base-entrypoint.sh .
