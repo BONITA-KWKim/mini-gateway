@@ -6,7 +6,7 @@ LABEL maintaner "kyungwon.KIM <kyungwon9010@gmail.com>"
 # install dependancies
 RUN apt-get update && apt-get install -y \
   build-essential autoconf git pkg-config \
-  automake libtool curl make g++ unzip \
+  automake libtool curl make g++ unzip cmake \
   && apt-get clean
 
 # create directory
@@ -38,7 +38,7 @@ RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /opt/services/
 
 # install googletest
 RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
-RUN git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc.git /opt/services/mini-gateway/third-party/googletest && \
+RUN git clone https://github.com/google/googletest.git /opt/services/mini-gateway/third-party/googletest && \
         cd /opt/services/mini-gateway/third-party/googletest && \ 
     echo "--- installing googletest ---" && \
     mkdir build && \
