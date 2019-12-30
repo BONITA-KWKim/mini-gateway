@@ -58,5 +58,5 @@ Temporary Items
 # no included directories
 bin/
 build/
-spark/
+spike/
 third-party/
