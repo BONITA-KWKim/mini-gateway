@@ -36,3 +36,7 @@ add_custom_target (start_ias
                    COMMAND internal_API_server
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
                    DEPENDS internal_API_server)
+
+## ========== cpp rest test ==========
+add_executable (test_cpp_rest ${IAS_SRC}/my_server.cc ${IAS_SRC}/my_server_main.cc) 
+#target_link_libraries(test_cpp_rest PUBLIC )
