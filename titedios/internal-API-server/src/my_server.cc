@@ -1,5 +1,3 @@
-#include <stdafx.h>
-#include <messagetypes.h>
 #include "my_server.h"
 
 using namespace std;

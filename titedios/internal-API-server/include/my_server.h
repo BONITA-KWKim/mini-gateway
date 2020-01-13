@@ -26,4 +26,4 @@ private:
 	void handle_delete (http_request msg);
 
 	http_listener m_listener;
-}
+};

@@ -38,5 +38,11 @@ add_custom_target (start_ias
                    DEPENDS internal_API_server)
 
 ## ========== cpp rest test ==========
+find_package (Boost REQUIRED COMPONENTS program_options regex)
+include_directories (${Boost_INCLUDE_DIRS})
+#find_package(cpprestsdk REQUIRED NAMES cpprestsdk cpprest)
+find_package(cpprestsdk REQUIRED)
+
 add_executable (test_cpp_rest ${IAS_SRC}/my_server.cc ${IAS_SRC}/my_server_main.cc) 
-#target_link_libraries(test_cpp_rest PUBLIC )
+
+target_link_libraries(test_cpp_rest PUBLIC ${cpprestsdk} pthread ${Boost_LIBRARIES})

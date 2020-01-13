@@ -1,4 +1,3 @@
-#include <stdafx.h>
 #include "my_server.h"
 
 using namespace web;
@@ -14,7 +13,7 @@ void on_initialize (const string_t &address)
 	uri.append_path(U("MyServer/Action/"));
 
 	auto addr = uri.to_uri().to_string();
-	g_http = std::unique_ptr<MyServer> (new MyServer(add));
+	g_http = std::unique_ptr<MyServer> (new MyServer(addr));
 	g_http->open().wait();
 
 	std::cout << utility::string_t(U("Listening for rueqeust at: ")) << addr << std::endl;
@@ -38,7 +37,7 @@ int main (int argc, char *argv[])
 	utility::string_t address = U("http://localhost:");
 	address.append(port);
 
-	on_initilize(address);
+	on_initialize(address);
 	std::cout << "Press ENTER to exit." << std::endl;
 
 	std::string line;

@@ -7,6 +7,7 @@ LABEL maintaner "kyungwon.KIM <kyungwon9010@gmail.com>"
 RUN apt-get update && apt-get install -y \
   build-essential autoconf git pkg-config \
   automake libtool curl make g++ unzip cmake \
+  vim \
   && apt-get clean
 
 # create directory
@@ -21,30 +22,36 @@ COPY ./library ./library
 
 # install gRPC
 # install protobuf first, then grpc
-RUN mkdir -p /opt/services/mini-gateway/third-party/grpc
-ENV GRPC_RELEASE_TAG v1.10.x
-RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /opt/services/mini-gateway/third-party/grac && \
-		cd /opt/services/mini-gateway/third-party/grac && \
-    git submodule update --init && \
-    echo "--- installing protobuf ---" && \
-    cd third_party/protobuf && \
-    ./autogen.sh && ./configure --enable-shared && \
-    make -j$(nproc) && make -j$(nproc) check && make install && make clean && ldconfig && \
-    echo "--- installing grpc ---" && \
-    cd /opt/services/mini-gateway/third-party/grac && \
-    make -j$(nproc) && make install && make clean && ldconfig 
+# RUN mkdir -p /opt/services/mini-gateway/third-party/grpc
+# ENV GRPC_RELEASE_TAG v1.10.x
+# RUN git clone -b ${GRPC_RELEASE_TAG} https://github.com/grpc/grpc /opt/services/mini-gateway/third-party/grac && \
+# 		cd /opt/services/mini-gateway/third-party/grac && \
+#     git submodule update --init && \
+#     echo "--- installing protobuf ---" && \
+#     cd third_party/protobuf && \
+#     ./autogen.sh && ./configure --enable-shared && \
+#     make -j$(nproc) && make -j$(nproc) check && make install && make clean && ldconfig && \
+#     echo "--- installing grpc ---" && \
+#     cd /opt/services/mini-gateway/third-party/grac && \
+#     make -j$(nproc) && make install && make clean && ldconfig 
     # && \ 
     # rm -rf /opt/services/mini-gateway/third-party/grpc
 
 # install googletest
-RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
-RUN git clone https://github.com/google/googletest.git /opt/services/mini-gateway/third-party/googletest && \
-        cd /opt/services/mini-gateway/third-party/googletest && \ 
-    echo "--- installing googletest ---" && \
-    mkdir build && \
-    cmake -Bbuild -H. && \
-    cmake --build build --target install && \
-    rm -rf /opt/services/mini-gateway/third-party/googletest
+# RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
+# RUN git clone https://github.com/google/googletest.git /opt/services/mini-gateway/third-party/googletest && \
+#         cd /opt/services/mini-gateway/third-party/googletest && \ 
+#     echo "--- installing googletest ---" && \
+#     mkdir build && \
+#     cmake -Bbuild -H. && \
+#     cmake --build build --target install && \
+#     rm -rf /opt/services/mini-gateway/third-party/googletest
+RUN apt-get install -y libgtest-dev
+
+# install cpprestsdk
+RUN apt-get install -y libboost-all-dev
+RUN apt-get install -y libcpprest-dev
+
 
 # install third party
 COPY ./base-entrypoint.sh .
