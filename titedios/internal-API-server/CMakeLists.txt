@@ -49,3 +49,7 @@ find_library (cpprest REQUIRED)
 add_executable (test_cpp_rest ${IAS_SRC}/my_server.cc ${IAS_SRC}/my_server_main.cc) 
 
 target_link_libraries(test_cpp_rest PUBLIC cpprest pthread ssl crypto ${Boost_LIBRARIES})
+
+#========== test request ==========
+add_executable (test_request ${IAS_SRC}/test_request.cc) 
+target_link_libraries(test_request PUBLIC cpprest pthread ssl crypto ${Boost_LIBRARIES})

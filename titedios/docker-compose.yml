@@ -6,6 +6,8 @@ services:
       context: .
       target: mini_gw_proxy
     container_name: mini_gw_proxy
+    networks:
+      - gateway_backbone_network
     command:
       - /opt/services/mini-gateway/proxy/proxy-entrypoint.sh
 
@@ -14,6 +16,10 @@ services:
       context: .
       target: mini_gw_internal_API
     container_name: mini_gw_internal_API
+    networks:
+      - gateway_backbone_network
+    ports:
+      - 34568:34568
     command:
         - /opt/services/mini-gateway/internal_API_server/internal-API-entrypoint.sh
     ipc: host
@@ -25,6 +31,8 @@ services:
       context: .
       target: mini_gw_vendor_kakao
     container_name: mini_gw_vendor_kakao
+    networks:
+      - gateway_backbone_network
     command:
         - /opt/services/mini-gateway/vendor-kakao/kakao-entrypoint.sh
     ipc: host
@@ -33,3 +41,7 @@ services:
     
 volumes:
   shared_volume:
+
+networks:
+  gateway_backbone_network:
+    driver: bridge

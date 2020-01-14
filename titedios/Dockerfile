@@ -38,15 +38,14 @@ COPY ./library ./library
     # rm -rf /opt/services/mini-gateway/third-party/grpc
 
 # install googletest
-# RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
-# RUN git clone https://github.com/google/googletest.git /opt/services/mini-gateway/third-party/googletest && \
-#         cd /opt/services/mini-gateway/third-party/googletest && \ 
-#     echo "--- installing googletest ---" && \
-#     mkdir build && \
-#     cmake -Bbuild -H. && \
-#     cmake --build build --target install && \
-#     rm -rf /opt/services/mini-gateway/third-party/googletest
-RUN apt-get install -y libgtest-dev
+RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
+RUN git clone https://github.com/google/googletest.git /opt/services/mini-gateway/third-party/googletest && \
+        cd /opt/services/mini-gateway/third-party/googletest && \ 
+    echo "--- installing googletest ---" && \
+    mkdir build && \
+    cmake -Bbuild -H. && \
+    cmake --build build --target install && \
+    rm -rf /opt/services/mini-gateway/third-party/googletest
 
 # install cpprestsdk
 RUN apt-get install -y libboost-all-dev
