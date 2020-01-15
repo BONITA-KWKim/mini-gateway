@@ -1,18 +1,18 @@
 #include "proxy.hh"
 
-int main(int argc, char *argv[]) 
+int main (int argc, char *argv[]) 
 {
     /* init */
     /* get options when starting program */
-    int result = get_options(argc, argv);
+    int result = get_options (argc, argv);
     if (1 == result) return 0;
     else if (0 > result) return -1;
 
     /* get configuration */
-    get_config("../config/proxy.conf");
+    get_config ("../config/proxy.conf");
 
     // check environment value
-    for(auto it = proxy_env.cbegin(); it != proxy_env.cend(); ++it) {
+    for (auto it = proxy_env.cbegin(); it != proxy_env.cend(); ++it) {
         std::cout << it->first << " " << it->second << std::endl;
     }
 
@@ -51,10 +51,10 @@ int main(int argc, char *argv[])
 /*
 * option
 */
-int get_options(int argc, char *argv[]) 
+int get_options (int argc, char *argv[]) 
 {
     int c = -1;
-	while (-1 != (c = getopt(argc, argv, "hl:")))
+	while (-1 != (c = getopt (argc, argv, "hl:")))
 	{
 		switch(c) {
 		case 'h':		// Show Help message
@@ -71,11 +71,11 @@ int get_options(int argc, char *argv[])
     return 0;
 }
 
-void show_help(void) 
+void show_help (void) 
 {
-	fprintf(stdout, "proxy [-h] [-l log_level] \r\n");
-	fprintf(stdout, "    -h: Show help\n");
-	fprintf(stdout, "    -l: Log level (hex string)\n");
+	fprintf (stdout, "proxy [-h] [-l log_level] \r\n");
+	fprintf (stdout, "    -h: Show help\n");
+	fprintf (stdout, "    -l: Log level (hex string)\n");
 }
 
 /*
@@ -89,7 +89,7 @@ int get_config(char * configFile)
     std::ifstream cFile (configFile);
     if (cFile.is_open()) {
         std::string line;
-        while(getline(cFile, line)) {
+        while(getline (cFile, line)) {
             if(line[0] == '#' || line.empty())
                 continue;
 
@@ -186,6 +186,8 @@ void *packet_handler(void *arg)
             std::cerr << "invalid telegram\n";
         }
 
+        /* test apt call */
+
         strcat(buffer, " SERVER ECHO");
 
         if((bytecount = send(sockfd, buffer, strlen(buffer), 0))== -1){
@@ -207,6 +209,7 @@ int event_select(int sockfd, int timeoutSec, int timeoutMSec)
 	timeout.tv_usec = timeoutMSec;  /* micro Seconds */
 	FD_ZERO(&fdset);
 	FD_SET (sockfd, &fdset);
+
 	rc = select(sockfd + 1, &fdset, (fd_set *)0, (fd_set *)0, (struct timeval *)&timeout);
 	if (rc > 0) {
 		// Event occurred
@@ -223,6 +226,7 @@ int event_select(int sockfd, int timeoutSec, int timeoutMSec)
 	return rc;
 }
 
-int parse_telegram(char *buf, std::string result){
+int parse_telegram(char *buf, std::string result) 
+{
     return 0;
 }

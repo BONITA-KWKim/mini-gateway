@@ -1,5 +1,5 @@
-#ifndef __INTERNAL_API_SERVER_H__
-#define __INTERNAL_API_SERVER_H__
+#ifndef __INTERNAL_MESSAGE_SERVER_H__
+#define __INTERNAL_MESSAGE_SERVER_H__
 
 #ifdef _cplusplus
 extern "C"{
@@ -9,11 +9,6 @@ extern "C"{
 #include <stdio.h>
 
 #include <iostream>
-#include <memory>
-#include <string>
-
-// gRPC
-
 
 // JSON
 #include "nlohmann/json.hpp"
@@ -23,4 +18,4 @@ using json = nlohmann::json;
 } // extern "C"
 #endif
 
-#endif //__INTERNAL_API_SERVER_H__
+#endif //__INTERNAL_MESSAGE_SERVER_H__

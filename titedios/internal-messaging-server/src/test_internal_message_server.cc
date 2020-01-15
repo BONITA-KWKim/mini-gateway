@@ -1,5 +1,5 @@
-#include "internal_API_server.h"
-#include "gtest/gtest.h"
+#include "internal_message_server_main.h"
+#include <gtest/gtest.h>
 
 TEST(IAS_test, test001) 
 {

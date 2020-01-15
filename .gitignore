@@ -60,3 +60,7 @@ bin/
 build/
 spike/
 third-party/
+
+
+## vagrant
+.vagrant/
