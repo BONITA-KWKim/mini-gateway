@@ -1,53 +1,12 @@
 #include "proxy.hh"
+#include <cpprest/http_client.h>
+#include <cpprest/filestream.h>
 
-int main (int argc, char *argv[]) 
-{
-    /* init */
-    /* get options when starting program */
-    int result = get_options (argc, argv);
-    if (1 == result) return 0;
-    else if (0 > result) return -1;
-
-    /* get configuration */
-    get_config ("../config/proxy.conf");
-
-    // check environment value
-    for (auto it = proxy_env.cbegin(); it != proxy_env.cend(); ++it) {
-        std::cout << it->first << " " << it->second << std::endl;
-    }
-
-    /* socket */
-    int new_socket = -1;
-    int master_socket = -1;
-    master_socket = init_socket(8520);
-    if (0 > master_socket) {
-        perror("master socket");
-        exit(1);
-    }
-
-    struct sockaddr_storage serverStorage;
-    socklen_t addr_size;
-    //Accept call creates a new socket for the incoming connection
-    addr_size = sizeof(serverStorage);
-
-    pthread_t tid = 0;
-	while (true) {
-        new_socket = accept(master_socket, (struct sockaddr *) &serverStorage, &addr_size);
-		if (-1 == new_socket) {
-			perror("accept error");
-			return 1;
-		}
-
-		if (0 != pthread_create(&tid, NULL, packet_handler, (void *)&new_socket)) {
-			perror("Thread Create Error");
-			return 1;
-		}
-		pthread_detach(tid);
-	}
-
-    return 0;
-}
-
+using namespace utility;                    // Common utilities like string conversions
+using namespace web;                        // Common features like URIs.
+using namespace web::http;                  // Common HTTP functionality
+using namespace web::http::client;          // HTTP client features
+using namespace concurrency::streams;       // Asynchronous streams
 /*
 * option
 */
@@ -145,6 +104,51 @@ int init_socket(int port_no)
     return server_fd;
 }
 
+int api_call_atalk (void) 
+{
+    /* test apt call */
+    auto fileStream = std::make_shared<ostream>();
+
+    // Open stream to output file.
+    pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
+    {
+        *fileStream = outFile;
+
+        // Create http_client to send the request.
+        http_client client(U("http://localhost:34568/"));
+
+        // Build request URI and start the request.
+        uri_builder builder(U("/v1/IMS/kakao-atalk/"));
+        builder.append_query(U("q"), U("cpprestsdk github"));
+        return client.request(methods::GET, builder.to_string());
+    })
+
+    // Handle response headers arriving.
+    .then([=](http_response response)
+    {
+        printf("Received response status code:%u\n", response.status_code());
+
+        // Write response body into the file.
+        return response.body().read_to_end(fileStream->streambuf());
+    })
+
+    // Close the file stream.
+    .then([=](size_t)
+    {
+        return fileStream->close();
+    });
+
+    // Wait for all the outstanding I/O to complete and handle any exceptions
+    try
+    {
+        requestTask.wait();
+    }
+    catch (const std::exception &e)
+    {
+        printf("Error exception:%s\n", e.what());
+    }    
+}
+
 void *packet_handler(void *arg)
 {
     int sockfd = *(int *)arg;
@@ -176,17 +180,18 @@ void *packet_handler(void *arg)
             break;
         }
 
-        printf("rc: %d\n", rc);
-        memset(buffer, 0, MAX_PACKET_BUFF_SIZE);
+        printf ("rc: %d\n", rc);
+        memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
 
-        printf("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
+        printf ("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
 
         /* parsing */
         if (0 > parse_telegram(buffer, parsed_str)) {
             std::cerr << "invalid telegram\n";
         }
 
-        /* test apt call */
+        /* API call */
+        api_call_atalk();
 
         strcat(buffer, " SERVER ECHO");
 
@@ -203,7 +208,7 @@ int event_select(int sockfd, int timeoutSec, int timeoutMSec)
 	struct timeval timeout;
 	fd_set         fdset;
 	int            rc, so_error;
-	socklen_t 		 len;
+	socklen_t 	   len;
 
 	timeout.tv_sec  = timeoutSec;   /* Seconds */
 	timeout.tv_usec = timeoutMSec;  /* micro Seconds */
@@ -228,5 +233,55 @@ int event_select(int sockfd, int timeoutSec, int timeoutMSec)
 
 int parse_telegram(char *buf, std::string result) 
 {
+    return 0;
+}
+
+int main (int argc, char *argv[]) 
+{
+    /* init */
+    /* get options when starting program */
+    int result = get_options (argc, argv);
+    if (1 == result) return 0;
+    else if (0 > result) return -1;
+
+    /* get configuration */
+    get_config ("../config/proxy.conf");
+
+    // check environment value
+    for (auto it = proxy_env.cbegin(); it != proxy_env.cend(); ++it) {
+        std::cout << it->first << " " << it->second << std::endl;
+    }
+
+    /* socket */
+    int new_socket = -1;
+    int master_socket = -1;
+    master_socket = init_socket(8520);
+    if (0 > master_socket) {
+        perror("master socket");
+        exit(1);
+    }
+
+    struct sockaddr_storage serverStorage;
+    socklen_t addr_size;
+    //Accept call creates a new socket for the incoming connection
+    addr_size = sizeof(serverStorage);
+
+    std::cout << "Proxy\n";
+
+    pthread_t tid = 0;
+	while (true) {
+        new_socket = accept(master_socket, (struct sockaddr *) &serverStorage, &addr_size);
+		if (-1 == new_socket) {
+			perror("accept error");
+			return 1;
+		}
+
+		if (0 != pthread_create(&tid, NULL, packet_handler, (void *)&new_socket)) {
+			perror("Thread Create Error");
+			return 1;
+		}
+		pthread_detach(tid);
+	}
+
     return 0;
 }

@@ -21,7 +21,7 @@ services:
     ports:
       - 34568:34568
     command:
-        - /opt/services/mini-gateway/internal_API_server/internal-API-entrypoint.sh
+        - /opt/services/mini-gateway/internal-message-server/internal-message-entrypoint.sh
     ipc: host
     volumes:
       - shared_volume:/opt/services/mini-gateway/shared

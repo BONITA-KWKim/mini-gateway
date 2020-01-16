@@ -51,7 +51,6 @@ RUN git clone https://github.com/google/googletest.git /opt/services/mini-gatewa
 RUN apt-get install -y libboost-all-dev
 RUN apt-get install -y libcpprest-dev
 
-
 # install third party
 COPY ./base-entrypoint.sh .
 RUN ["chmod", "+x", "./base-entrypoint.sh"]
@@ -80,13 +79,13 @@ FROM mini_gw_base AS mini_gw_internal_API
 #RUN apk add cmake build-base
 
 # create directory
-RUN mkdir -p /opt/services/mini-gateway/internal_API_server
-WORKDIR /opt/services/mini-gateway/internal_API_server
+RUN mkdir -p /opt/services/mini-gateway/internal-message-server
+WORKDIR /opt/services/mini-gateway/internal-message-server
 
 # copy our project code
-COPY ./internal-API-server .
+COPY ./internal-message-server .
 
-RUN ["chmod", "+x", "./internal-API-entrypoint.sh"]
+RUN ["chmod", "+x", "./internal-message-entrypoint.sh"]
 #ENTRYPOINT ["sh", "./internal-API-entrypoint.sh"] 
 
 # ========== mini gateway internal API server ==========
