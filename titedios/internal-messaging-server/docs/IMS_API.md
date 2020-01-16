@@ -24,6 +24,7 @@ This paper is to describe to internal message server API for transmitting messag
 - header:  
 - client timeout:  60
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | message_type | text(2) | N | The type of message | "message_type":"AT" |
@@ -42,6 +43,7 @@ This paper is to describe to internal message server API for transmitting messag
 [Respose]
 - header:  
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | code | text(4) | Y | The result of sending | "code":"0000" |
@@ -55,6 +57,7 @@ This paper is to describe to internal message server API for transmitting messag
 - header:  
 - client timeout:  60
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | message_type | text(2) | N | The type of message</br>(FT: friendtalk) | "message_type":"FT" |
@@ -70,6 +73,7 @@ This paper is to describe to internal message server API for transmitting messag
 [Respose]
 - header:  
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | code | text(4) | Y | The result of sending | "code":"0000" |
@@ -82,6 +86,7 @@ This paper is to describe to internal message server API for transmitting messag
 - header:  
 - client timeout:  60
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | serial_no | text(30) | Y | Message serial number | "serial_no":"12345678" |
@@ -90,6 +95,7 @@ This paper is to describe to internal message server API for transmitting messag
 [Respose]
 - header:  
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | code | text(4) | Y | The result of sending | "code":"0000" |
@@ -103,6 +109,7 @@ This paper is to describe to internal message server API for transmitting messag
 - header:  
 - client timeout:  60
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | serial_no | text(30) | Y | Message serial number | "serial_no":"12345678" |
@@ -111,6 +118,7 @@ This paper is to describe to internal message server API for transmitting messag
 [Respose]
 - header:  
 - parameters  
+
 | key | type | required | description | example |
 |-----|------|----------|-------------|---------|
 | code | text(4) | Y | The result of sending | "code":"0000" |
