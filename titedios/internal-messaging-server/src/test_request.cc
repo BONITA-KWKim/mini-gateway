@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
         http_client client(U("http://localhost:34568/"));
 
         // Build request URI and start the request.
-        uri_builder builder(U("/MyServer/Action/"));
+        uri_builder builder(U("/v1/IMS/kakao-atalk/"));
         builder.append_query(U("q"), U("cpprestsdk github"));
         return client.request(methods::GET, builder.to_string());
     })

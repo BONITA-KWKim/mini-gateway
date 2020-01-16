@@ -1,5 +1,10 @@
-#include "internal_message_server_main.h"
 #include <gtest/gtest.h>
+#include "IMS_test.h"
+#include "IMS_base.h"
+#include "IMS_atalk.h"
+#include "IMS_ftalk.h"
+#include "IMS_mms.h"
+#include "IMS_sms.h"
 
 TEST(IAS_test, test001) 
 {

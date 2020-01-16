@@ -10,7 +10,7 @@ This paper is to describe to internal message server API for transmitting messag
 
 - Friendtalk:
 
-## Prerequisiteq
+## Prerequisite
 
 ## API specification
 ### Host

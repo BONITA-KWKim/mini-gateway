@@ -10,11 +10,11 @@ using namespace http;
 using namespace utility;
 using namespace http::experimental::listener;
 
-class IMS
+class IMS_TEST
 {
 public:
-	IMS () {}
-	IMS (utility::string_t url);
+	IMS_TEST () {}
+	IMS_TEST (utility::string_t url);
 
 	pplx::task<void> open () { return m_listener.open(); }
 	pplx::task<void> close () { return m_listener.close(); }
