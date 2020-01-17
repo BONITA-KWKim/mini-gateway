@@ -18,7 +18,7 @@ void IMS_ATALK::handle_post (http_request message)
 	ucout << "Atalk module; POST method" << endl;
 	ucout << message.to_string() << endl;
 
-	json::value answer = json::value::array();
+	//json::value answer = json::value::array();
 
 	/*
     string input(message.to_string()); 
@@ -30,5 +30,6 @@ void IMS_ATALK::handle_post (http_request message)
         ucout << result[i] << endl; 
 	*/
 
-	message.reply (status_codes::OK, json::value::object(answer));
+	//message.reply (status_codes::OK, json::value::object(answer));
+	message.reply (status_codes::OK);
 }

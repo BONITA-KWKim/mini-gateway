@@ -128,62 +128,6 @@ int api_call_atalk (char *buffer)
     } catch (const std::exception &e) {
         printf("[%s:%d]Error exception:%s\n", __func__, __LINE__, e.what());
     }   
-
-    // /* test apt call */
-    // auto fileStream = std::make_shared<ostream>();
-
-    // // Open stream to output file.
-    // pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
-    // {
-    //     *fileStream = outFile;
-
-    //     // Create http_client to send the request.
-    //     http_client client(U("http://localhost:34568/"));
-
-    //     // Build request URI and start the request.
-    //     uri_builder builder(U("/v1/IMS/"));
-    //     builder.append_path(U("kakao-atalk"));
-
-    //     json::value jsonObject;
-	// 	jsonObject[U("first_name")] = json::value::string(U("atakan"));
-	// 	jsonObject[U("last_name")] = json::value::string(U("sarioglu"));
-    //     /*
-	// 	return http_client(U("https://reqres.in"))
-	// 		.request(methods::POST,
-	// 			uri_builder(U("api")).append_path(U("users")).to_string(),
-	// 			jsonObject.serialize(), U("application/json"));
-    //             */
-
-    //     return client.request(methods::POST, builder.to_string(), jsonObject.serialize());
-    //     // return client.request(methods::POST, uri_builder(U("/v1/IMS/")).append_path(U("kakao-atalk")).to_string(),
-	// 	// 		jsonObject.serialize(), U("application/json"));
-        
-    // })
-
-    // // Handle response headers arriving.
-    // .then([=](http_response response)
-    // {
-    //     printf("Received response status code:%u\n", response.status_code());
-
-    //     // Write response body into the file.
-    //     return response.body().read_to_end(fileStream->streambuf());
-    // })
-
-    // // Close the file stream.
-    // .then([=](size_t)
-    // {
-    //     return fileStream->close();
-    // });
-
-    // Wait for all the outstanding I/O to complete and handle any exceptions
-    // try
-    // {
-    //     requestTask.wait();
-    // }
-    // catch (const std::exception &e)
-    // {
-    //     printf("Error exception:%s\n", e.what());
-    // }    
 }
 
 void *packet_handler(void *arg)
