@@ -118,9 +118,23 @@ int api_call_atalk (void)
         http_client client(U("http://localhost:34568/"));
 
         // Build request URI and start the request.
-        uri_builder builder(U("/v1/IMS/kakao-atalk/"));
-        builder.append_query(U("q"), U("cpprestsdk github"));
-        return client.request(methods::GET, builder.to_string());
+        uri_builder builder(U("/v1/IMS/"));
+        builder.append_path(U("kakao-atalk"));
+
+        json::value jsonObject;
+		jsonObject[U("first_name")] = json::value::string(U("atakan"));
+		jsonObject[U("last_name")] = json::value::string(U("sarioglu"));
+        /*
+		return http_client(U("https://reqres.in"))
+			.request(methods::POST,
+				uri_builder(U("api")).append_path(U("users")).to_string(),
+				jsonObject.serialize(), U("application/json"));
+                */
+
+        //return client.request(methods::POST, builder.to_string(), jsonObject.serialize());
+        return client.request(methods::POST, uri_builder(U("/v1/IMS/")).append_path(U("kakao-atalk")).to_string(),
+				jsonObject.serialize(), U("application/json"));
+        
     })
 
     // Handle response headers arriving.
@@ -161,11 +175,12 @@ void *packet_handler(void *arg)
     while (true) {
         if (1 > (rc = event_select(sockfd, 1, 0))) {
             /* no event */
-            printf("no event\n");
             continue;
         }
 
         /* receive socket data */
+        bytecount = 0;
+        memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
         rc = recv(sockfd, buffer, MAX_PACKET_BUFF_SIZE, 0);
 
         if (0 > rc) {
@@ -181,24 +196,33 @@ void *packet_handler(void *arg)
         }
 
         printf ("rc: %d\n", rc);
-        memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
+        printf ("[%s:%d]Received string \"%s\"\n", __func__, __LINE__, buffer);
+        /* find EOP */
+		const char eop_pattern[] = "END";
+        int end_position = strlen(buffer) - strlen(eop_pattern);
+        printf ("[%s:%d] string length: %d, eop pattern length: %d end_pos: %d \n", 
+            __func__, __LINE__, strlen(buffer), sizeof eop_pattern, end_position);
+        if (0 != strncmp(&buffer[end_position], eop_pattern, sizeof eop_pattern)) {
+            // not found EOP
+            printf("EOP is not found.\n");
 
-        printf ("Received bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
+            memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
+            strcat(buffer, " EOP not found");
+        } else {
+            /* API call */
+            api_call_atalk();
 
-        /* parsing */
-        if (0 > parse_telegram(buffer, parsed_str)) {
-            std::cerr << "invalid telegram\n";
+            memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
+            strcat(buffer, " SERVER ECHO");
         }
 
-        /* API call */
-        api_call_atalk();
+        printf ("ack bytes %d\nReceived string \"%s\"\n", bytecount, buffer);
 
-        strcat(buffer, " SERVER ECHO");
-
+        /* ACK */
         if((bytecount = send(sockfd, buffer, strlen(buffer), 0))== -1){
             fprintf(stderr, "Error sending data %d\n", errno);
         }
-        
+
         printf("Sent bytes %d\n", bytecount);
     }
 }
@@ -229,11 +253,6 @@ int event_select(int sockfd, int timeoutSec, int timeoutMSec)
 		// Timeout
 	}
 	return rc;
-}
-
-int parse_telegram(char *buf, std::string result) 
-{
-    return 0;
 }
 
 int main (int argc, char *argv[]) 

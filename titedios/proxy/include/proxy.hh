@@ -27,7 +27,7 @@ extern "C"{
 using json = nlohmann::json;
 
 // ========== Parser ==========
-#include "tao/pegtl.hpp"
+//#include "tao/pegtl.hpp"
 
 // ========== Definition ==========
 #define MAX_PACKET_BUFF_SIZE 4096
@@ -42,7 +42,6 @@ int init_socket (int port_no);
 int api_call_atalk (void);
 void *packet_handler (void *arg);
 int event_select (int sockfd, int timeoutSec, int timeoutMSec);
-int parse_telegram (char *buf, std::string result);
 
 #ifdef _cplusplus
 } // extern "C"

@@ -20,9 +20,9 @@ public:
 	// pplx::task<void> close () { return m_listener.close(); }
 
 private:
-	virtual void handle_get (http_request msg)=0;
+	// virtual void handle_get (http_request msg)=0;
 	// virtual void handle_put (http_request msg)=0;
-	// virtual void handle_post (http_request msg)=0;
+	virtual void handle_post (http_request msg)=0;
 	// virtual void handle_delete (http_request msg)=0;
 
 	http_listener m_listener;
