@@ -3,7 +3,10 @@
 #include <boost/algorithm/string.hpp> 
 
 using namespace std;
+using namespace web::http;
 using namespace web::http::experimental::listener;
+
+map<utility::string_t, utility::string_t> dictionary;
 
 IMS_ATALK::IMS_ATALK (utility::string_t url) : m_listener (url)
 {
@@ -15,6 +18,8 @@ void IMS_ATALK::handle_post (http_request message)
 	ucout << "Atalk module; POST method" << endl;
 	ucout << message.to_string() << endl;
 
+	json::value answer = json::value::array();
+
 	/*
     string input(message.to_string()); 
 
@@ -25,5 +30,5 @@ void IMS_ATALK::handle_post (http_request message)
         ucout << result[i] << endl; 
 	*/
 
-	message.reply (status_codes::OK, message.to_string());
+	message.reply (status_codes::OK, json::value::object(answer));
 }

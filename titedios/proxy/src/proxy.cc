@@ -104,63 +104,86 @@ int init_socket(int port_no)
     return server_fd;
 }
 
-int api_call_atalk (void) 
+int api_call_atalk (char *buffer) 
 {
-    /* test apt call */
-    auto fileStream = std::make_shared<ostream>();
+	http_client client(U("http://localhost:34568/"));
+    uri_builder builder(U("/v1/IMS/"));
+    builder.append_path(U("kakao-atalk"));
 
-    // Open stream to output file.
-    pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
-    {
-        *fileStream = outFile;
+    json::value json_telegram;
+    json_telegram[U("message")] = json::value::string(U(buffer));
 
-        // Create http_client to send the request.
-        http_client client(U("http://localhost:34568/"));
+    try{
+        client.request(methods::POST, builder.to_string(), json_telegram.serialize()).then([=](http_response response)
+        {
+            ucout << "[" << __func__ << ":" << __LINE__ << "]" << U("STATUS : ") << response.status_code() << std::endl;
+            ucout << "[" << __func__ << ":" << __LINE__ << "]" << U("content-type : ") << response.headers().content_type() << std::endl;
+            /*
+            response.extract_json(true).then([](json::value v) {
+                ucout << v.at(U("date")).as_string() << std::endl;
+                ucout << v.at(U("time")).as_string() << std::endl;
+            }).wait();
+            */
+        }).wait();
+    } catch (const std::exception &e) {
+        printf("[%s:%d]Error exception:%s\n", __func__, __LINE__, e.what());
+    }   
 
-        // Build request URI and start the request.
-        uri_builder builder(U("/v1/IMS/"));
-        builder.append_path(U("kakao-atalk"));
+    // /* test apt call */
+    // auto fileStream = std::make_shared<ostream>();
 
-        json::value jsonObject;
-		jsonObject[U("first_name")] = json::value::string(U("atakan"));
-		jsonObject[U("last_name")] = json::value::string(U("sarioglu"));
-        /*
-		return http_client(U("https://reqres.in"))
-			.request(methods::POST,
-				uri_builder(U("api")).append_path(U("users")).to_string(),
-				jsonObject.serialize(), U("application/json"));
-                */
+    // // Open stream to output file.
+    // pplx::task<void> requestTask = fstream::open_ostream(U("results.html")).then([=](ostream outFile)
+    // {
+    //     *fileStream = outFile;
 
-        //return client.request(methods::POST, builder.to_string(), jsonObject.serialize());
-        return client.request(methods::POST, uri_builder(U("/v1/IMS/")).append_path(U("kakao-atalk")).to_string(),
-				jsonObject.serialize(), U("application/json"));
+    //     // Create http_client to send the request.
+    //     http_client client(U("http://localhost:34568/"));
+
+    //     // Build request URI and start the request.
+    //     uri_builder builder(U("/v1/IMS/"));
+    //     builder.append_path(U("kakao-atalk"));
+
+    //     json::value jsonObject;
+	// 	jsonObject[U("first_name")] = json::value::string(U("atakan"));
+	// 	jsonObject[U("last_name")] = json::value::string(U("sarioglu"));
+    //     /*
+	// 	return http_client(U("https://reqres.in"))
+	// 		.request(methods::POST,
+	// 			uri_builder(U("api")).append_path(U("users")).to_string(),
+	// 			jsonObject.serialize(), U("application/json"));
+    //             */
+
+    //     return client.request(methods::POST, builder.to_string(), jsonObject.serialize());
+    //     // return client.request(methods::POST, uri_builder(U("/v1/IMS/")).append_path(U("kakao-atalk")).to_string(),
+	// 	// 		jsonObject.serialize(), U("application/json"));
         
-    })
+    // })
 
-    // Handle response headers arriving.
-    .then([=](http_response response)
-    {
-        printf("Received response status code:%u\n", response.status_code());
+    // // Handle response headers arriving.
+    // .then([=](http_response response)
+    // {
+    //     printf("Received response status code:%u\n", response.status_code());
 
-        // Write response body into the file.
-        return response.body().read_to_end(fileStream->streambuf());
-    })
+    //     // Write response body into the file.
+    //     return response.body().read_to_end(fileStream->streambuf());
+    // })
 
-    // Close the file stream.
-    .then([=](size_t)
-    {
-        return fileStream->close();
-    });
+    // // Close the file stream.
+    // .then([=](size_t)
+    // {
+    //     return fileStream->close();
+    // });
 
     // Wait for all the outstanding I/O to complete and handle any exceptions
-    try
-    {
-        requestTask.wait();
-    }
-    catch (const std::exception &e)
-    {
-        printf("Error exception:%s\n", e.what());
-    }    
+    // try
+    // {
+    //     requestTask.wait();
+    // }
+    // catch (const std::exception &e)
+    // {
+    //     printf("Error exception:%s\n", e.what());
+    // }    
 }
 
 void *packet_handler(void *arg)
@@ -195,7 +218,7 @@ void *packet_handler(void *arg)
             break;
         }
 
-        printf ("rc: %d\n", rc);
+        printf ("[%s:%d]rc: %d\n", __func__, __LINE__, rc);
         printf ("[%s:%d]Received string \"%s\"\n", __func__, __LINE__, buffer);
         /* find EOP */
 		const char eop_pattern[] = "END";
@@ -210,7 +233,7 @@ void *packet_handler(void *arg)
             strcat(buffer, " EOP not found");
         } else {
             /* API call */
-            api_call_atalk();
+            api_call_atalk(buffer);
 
             memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
             strcat(buffer, " SERVER ECHO");
