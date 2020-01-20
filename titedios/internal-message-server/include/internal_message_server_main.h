@@ -33,6 +33,9 @@ std::unique_ptr<IMS_FTALK> ftalk_http;
 std::unique_ptr<IMS_MMS> mms_http;
 std::unique_ptr<IMS_SMS> sms_http;
 
+/// 
+#define COUT_PREFIX "[" << __func__ << ":" <<  __LINE__ <<  "] "
+
 #ifdef _cplusplus
 } // extern "C"
 #endif

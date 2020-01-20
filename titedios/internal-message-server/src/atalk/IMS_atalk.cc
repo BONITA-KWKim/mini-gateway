@@ -30,5 +30,6 @@ void IMS_ATALK::handle_post (http_request message)
         ucout << result[i] << endl; 
 	*/
 
-	message.reply (status_codes::OK, json::value::object(answer));
+	message.reply (status_codes::OK, json::value(answer));
+	//message.reply (status_codes::OK);
 }

@@ -1,8 +1,8 @@
 cmake_minimum_required (VERSION 3.5.1)
-project ("Internal message server")
+message ("internal message server")
 
 if (NOT MSVC)
-  add_definitions (-std=c++17)
+  add_definitions (-std=c++11)
 else ()
   add_definitions (-D_WIN32_WINNT=0x600)
 endif()

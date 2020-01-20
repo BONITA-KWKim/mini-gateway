@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.5.1)
 message ("Proxy server")
 
-add_definitions (-std=c++17)
+add_definitions (-std=c++11)
 
 # ========== Proxy ==========
 set (COMMON_INC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
