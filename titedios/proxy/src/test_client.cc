@@ -70,7 +70,7 @@ int main (int argv, char** argc)
     }
     printf ("Sent bytes %d\n", bytecount);
 
-    if ((bytecount = recvc (hsock, buffer, buffer_len, 0)) == -1) {
+    if ((bytecount = recv (hsock, buffer, buffer_len, 0)) == -1) {
         fprintf (stderr, "Error receiving data %d\n", errno);
         goto FINISH;
     }

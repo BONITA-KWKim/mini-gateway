@@ -1,9 +1,9 @@
 #include "internal_message_server_main.h"
 #include "unistd.h"
 
-void on_initialize (const string_t &address)
+void init_web_servers (const string_t &address)
 {
-	/* URI setting */
+	/// URI setting
 	uri_builder uri (address);
 	uri.append_path (U("/v1/IMS/test/"));
 	uri_builder uri_atalk (address);
@@ -35,13 +35,25 @@ void on_initialize (const string_t &address)
 	std::cout << utility::string_t (U("Listening for ruequest at: ")) << addr << std::endl;
 }
 
-void on_shutdown (void)
+void shutdown_web_servers (void)
 {
+	std::cout << COUT_PREFIX << "Bye-Bye internal message server.\n";
+
 	g_http->close().wait();
 	atalk_http->close().wait();
 	ftalk_http->close().wait();
 	mms_http->close().wait();
 	sms_http->close().wait();
+}
+
+int init_ipc (void)
+{
+	std::cout << COUT_PREFIX << "init IPC.\n";
+}
+
+void request_to_vendor_for_connecting_mmap (void)
+{
+	std::cout << COUT_PREFIX << "connection mmap\n";
 }
 
 int main (int argc, char *argv[]) 
@@ -52,18 +64,27 @@ int main (int argc, char *argv[])
 	utility::string_t port    = U("34568");
 	address.append (port);
 
-	on_initialize (address);
+	/// open web servers
+	init_web_servers (address);
+
+	/// setting memory mapped file
+	init_ipc ();
+
+	/// request to vendor modules for connecting mmap
+	request_to_vendor_for_connecting_mmap ();
 
 	// while (true) {
 	// 	/// sleep 5s
 	// 	usleep(5000000);
 	// }
 
-	std::cout << "Press ENTER to exit.\n";
+	std::cout << COUT_PREFIX << "Press ENTER to exit.\n";
 
 	std::string line;
 	std::getline (std::cin, line);
 
-	on_shutdown ();
+	shutdown_web_servers ();
+
 	return 0;
 }
+ 

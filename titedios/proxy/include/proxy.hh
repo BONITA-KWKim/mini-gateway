@@ -29,6 +29,9 @@ using json = nlohmann::json;
 // ========== Parser ==========
 //#include "tao/pegtl.hpp"
 
+///
+#include "mini-gw-common.h"
+
 /********** define **********/
 ///
 #define MAX_PACKET_BUFF_SIZE 4096
