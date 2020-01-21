@@ -1,5 +1,8 @@
 #pragma once
 
+///
+#include "mini-gw-common.h"
+
 #include <cpprest/json.h>
 #include <cpprest/http_listener.h>
 #include <cpprest/uri.h>

@@ -1,5 +1,5 @@
 # ========== mini gateway base ==========
-FROM debian:stretch AS mini_gw_base
+FROM debian:stretch AS mini-gw-base
 
 LABEL maintaner "kyungwon.KIM <kyungwon9010@gmail.com>"
 
@@ -17,9 +17,10 @@ RUN mkdir -p /opt/services/mini-gateway/shared
 WORKDIR /opt/services/mini-gateway
 RUN mkdir include
 RUN mkdir library
+RUN mkdir config
 COPY ./include ./include
 COPY ./library ./library
-
+COPY ./config  ./config
 # install gRPC
 # install protobuf first, then grpc
 # RUN mkdir -p /opt/services/mini-gateway/third-party/grpc
@@ -34,8 +35,8 @@ COPY ./library ./library
 #     echo "--- installing grpc ---" && \
 #     cd /opt/services/mini-gateway/third-party/grac && \
 #     make -j$(nproc) && make install && make clean && ldconfig 
-    # && \ 
-    # rm -rf /opt/services/mini-gateway/third-party/grpc
+#     && \ 
+#     rm -rf /opt/services/mini-gateway/third-party/grpc
 
 # install googletest
 RUN mkdir -p /opt/services/mini-gateway/third-party/googletest
@@ -57,7 +58,7 @@ RUN ["chmod", "+x", "./base-entrypoint.sh"]
 RUN ["sh", "./base-entrypoint.sh"]
 
 # ========== mini gateway proxy server ==========
-FROM mini_gw_base AS mini_gw_proxy
+FROM mini_gw_base AS mini-gw-proxy
 
 # install dependancies
 #RUN apk add cmake build-base
@@ -72,8 +73,8 @@ COPY ./proxy .
 RUN ["chmod", "+x", "./proxy-entrypoint.sh"]
 #ENTRYPOINT ["sh", "./proxy-entrypoint.sh"] 
 
-# ========== mini gateway internal API server ==========
-FROM mini_gw_base AS mini_gw_internal_API
+# ========== mini gateway internal message server ==========
+FROM mini_gw_base AS mini-gw-internal-IMS
 
 # install dependancies
 #RUN apk add cmake build-base
@@ -86,10 +87,10 @@ WORKDIR /opt/services/mini-gateway/internal-message-server
 COPY ./internal-message-server .
 
 RUN ["chmod", "+x", "./internal-message-entrypoint.sh"]
-#ENTRYPOINT ["sh", "./internal-API-entrypoint.sh"] 
+#ENTRYPOINT ["sh", "./internal-message-entrypoint.sh"] 
 
-# ========== mini gateway internal API server ==========
-FROM mini_gw_base AS mini_gw_vendor_kakao
+# ========== mini gateway internal  server ==========
+FROM mini_gw_base AS mini-gw-vendor-kakao
 
 # install dependancies
 #RUN apk add cmake build-base
@@ -103,3 +104,15 @@ COPY ./vendor-kakao .
 
 RUN ["chmod", "+x", "./kakao-entrypoint.sh"]
 #ENTRYPOINT ["sh", "./kakao-entrypoint.sh"] 
+
+# ========== mini gateway database manager ==========
+FROM postgres:12.1-alpine AS mini-gw-db-manager
+
+# create directory
+RUN mkdir -p /opt/services/mini-gateway/db-manager
+WORKDIR /opt/services/mini-gateway/db-manager
+
+# copy our project code
+COPY ./db-manager .
+
+RUN ["chmod", "+x", "./db-manager-entrypoint.sh"]

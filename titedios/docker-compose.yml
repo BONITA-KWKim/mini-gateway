@@ -4,17 +4,19 @@ services:
   mini_gw_proxy:
     build: 
       context: .
-      target: mini_gw_proxy
+      target: mini-gw-proxy
     container_name: mini_gw_proxy
     networks:
       - gateway_backbone_network
     command:
       - /opt/services/mini-gateway/proxy/proxy-entrypoint.sh
-
+    volumes:
+      - shared_volume:/opt/services/mini-gateway/shared
+  
   mini_gw_internal_api:
     build: 
       context: .
-      target: mini_gw_internal_API
+      target: mini-gw-internal-IMS
     container_name: mini_gw_internal_API
     networks:
       - gateway_backbone_network
@@ -29,7 +31,7 @@ services:
   mini_gw_vendor_kakao:
     build: 
       context: .
-      target: mini_gw_vendor_kakao
+      target: mini-gw-vendor-kakao
     container_name: mini_gw_vendor_kakao
     networks:
       - gateway_backbone_network
@@ -39,6 +41,19 @@ services:
     volumes:
       - shared_volume:/opt/services/mini-gateway/shared
     
+  mini_gw_db_manager:
+    build:
+      context: .
+      target: mini-gw-db-manager
+    container_name: mini_gw_db_manager
+    networks:
+      - gateway_backbone_network
+    command:
+        - /opt/services/mini-gateway/db-manager/db-manager-entrypoint.sh
+    ipc: host
+    volumes:
+      - shared_volume:/opt/services/mini-gateway/shared
+
 volumes:
   shared_volume:
 

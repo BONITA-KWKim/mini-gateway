@@ -17,6 +17,7 @@ set (IMS_ATALK ${IMS_SRC}/atalk)
 set (IMS_FTALK ${IMS_SRC}/ftalk)
 set (IMS_MMS ${IMS_SRC}/mms)
 set (IMS_SMS ${IMS_SRC}/sms)
+set (IMS_TXT_MODULE ${IMS_SRC}/text-message-modules)
 
 include_directories (${COMMON_INC} ${IMS_INC})
 link_directories (${COMMON_LIB})
@@ -32,10 +33,11 @@ include_directories (${Boost_INCLUDE_DIRS})
 
 ## ========== operating ==========
 set (IMS_TEST_MODULES ${IMS_SRC}/IMS_test.cc)
-set (IMS_VENDOR_MODULES ${IMS_ATALK}/IMS_atalk.cc ${IMS_FTALK}/IMS_ftalk.cc 
+set (IMS_TXT_MSG_MODULES ${IMS_TXT_MODULE}/parser.cc)
+set (IMS_HTTPS_MODULES ${IMS_ATALK}/IMS_atalk.cc ${IMS_FTALK}/IMS_ftalk.cc 
                         ${IMS_MMS}/IMS_mms.cc ${IMS_SMS}/IMS_sms.cc)
 set (IMS_SRC_FILES ${IMS_SRC}/internal_message_server_main.cc
-                   ${IMS_VENDOR_MODULES} ${IMS_TEST_MODULES})
+                   ${IMS_HTTPS_MODULES} ${IMS_TXT_MSG_MODULES} ${IMS_TEST_MODULES})
 
 add_executable (internal_message_server ${IMS_SRC_FILES}) 
 target_link_libraries (internal_message_server PUBLIC cpprest pthread ssl 

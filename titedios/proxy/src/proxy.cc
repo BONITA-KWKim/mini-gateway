@@ -90,22 +90,25 @@ int init_socket (int port_no)
         perror ("listen"); 
         exit (EXIT_FAILURE); 
     } 
-
+ 
     return server_fd;
 }
 
 int api_call_atalk (char *buffer) 
 {
-	http_client client(U("http://localhost:34568/"));
-    uri_builder builder(U("/v1/IMS/"));
-    builder.append_path(U("kakao-atalk"));
+	http_client client (U("http://localhost:34568/"));
+    uri_builder builder (U("/v1/IMS/"));
+    builder.append_path (U("kakao-atalk"));
 
     json::value json_telegram;
-    json_telegram[U("message")] = json::value::string(U(buffer));
+    json_telegram[U("message")] = json::value::string (U(buffer));
+
+    http_request req(methods::POST);
+    req.set_request_uri(builder.to_string());
+    req.set_body(json_telegram);
 
     try{
-        client.request(methods::POST, builder.to_string(), json_telegram.serialize()).then([=](http_response response)
-        {
+        client.request (req).then([=](http_response response) {
             ucout << COUT_PREFIX << U("STATUS : ") << response.status_code() << std::endl;
             ucout << COUT_PREFIX << U("content-type : ") << response.headers().content_type() << std::endl;
             /*
@@ -163,16 +166,16 @@ void *packet_handler (void *arg)
 		const char eop_pattern[] = "END";
         int end_position = strlen (buffer) - strlen( eop_pattern);
         std::cout << COUT_PREFIX << "string length: " << strlen(buffer) <<
-            ", eop pattern length: " << sizeof eop_pattern << ", end_pos: " << end_position << endl;
+            ", eop pattern length: " << sizeof eop_pattern << ", end_pos: " << end_position << std::endl;
         if (0 != strncmp(&buffer[end_position], eop_pattern, sizeof eop_pattern)) {
             // not found EOP
-            std::cout << COUT_PREFIX << "EOP is not found." << std::endl
+            std::cout << COUT_PREFIX << "EOP is not found." << std::endl;
 
             memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
             strcat(buffer, " EOP not found");
         } else {
             /* API call */
-            api_call_atalk(buffer);
+            api_call_atalk (buffer);
 
             memset (buffer, 0, MAX_PACKET_BUFF_SIZE);
             strcat(buffer, " SERVER ECHO");
