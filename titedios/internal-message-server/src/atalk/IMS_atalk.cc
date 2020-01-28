@@ -10,7 +10,18 @@ map<utility::string_t, utility::string_t> dictionary;
 
 IMS_ATALK::IMS_ATALK (utility::string_t url) : m_listener (url)
 {
+	/// define support methods
 	m_listener.support (methods::POST, std::bind(&IMS_ATALK::handle_post, this, std::placeholders::_1));
+
+	/// MMF
+	util_mmf = new UTILMMF();
+	msg_record = (MSG_RECORD *)util_mmf->attach_MMF(MMF_IDX_PTN,
+	                                                O_RDWR | O_CREAT, 
+   	                                                MMF_PTN_FILENAME, 
+													sizeof(MSG_RECORD) * 100, 
+			                                        MAX_PTN_RECORDS, 
+													0, 
+                                                    0, NULL); // MMF
 }
 
 void IMS_ATALK::handle_post (http_request message)
@@ -50,13 +61,22 @@ int IMS_ATALK::request_to_send_message(std::string message)
 	ucout << COUT_PREFIX << "input param: " << message << std::endl;
 #endif
 	/// parsing
-	auto telegram_rows = parser(message);
+	auto telegram = parser(message);
 
-	for (auto const & i: telegram_rows) {
+#ifdef DEBUG
+	int test = 0;
+	for (auto const & i: telegram) {
 		std::cout << i.first << ":" << i.second << std::endl;
-	}
 
+		msg_record[test].test = test;
+		std::cout << COUT_PREFIX << "The number of field: " << 
+			msg_record[test].test << std::endl;
+
+		++test;
+	}
+#endif		
 	/// enqueue to MMF
+
 
 	return 0;
 }

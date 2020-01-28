@@ -8,6 +8,10 @@ extern "C"{
 ///
 #define COUT_PREFIX "[" << __func__ << ":" <<  __LINE__ <<  "] "
 
+typedef struct _MSG_RECORD {
+    int test;
+} MSG_RECORD;
+
 #ifdef _cplusplus
 } // extern "C"
 #endif
