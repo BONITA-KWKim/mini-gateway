@@ -17,7 +17,7 @@ services:
     build: 
       context: .
       target: mini-gw-internal-IMS
-    container_name: mini_gw_internal_API
+    container_name: mini_gw_internal_IMS
     networks:
       - gateway_backbone_network
     ports:

@@ -58,7 +58,7 @@ RUN ["chmod", "+x", "./base-entrypoint.sh"]
 RUN ["sh", "./base-entrypoint.sh"]
 
 # ========== mini gateway proxy server ==========
-FROM mini_gw_base AS mini-gw-proxy
+FROM mini-gw-base AS mini-gw-proxy
 
 # install dependancies
 #RUN apk add cmake build-base
@@ -74,7 +74,7 @@ RUN ["chmod", "+x", "./proxy-entrypoint.sh"]
 #ENTRYPOINT ["sh", "./proxy-entrypoint.sh"] 
 
 # ========== mini gateway internal message server ==========
-FROM mini_gw_base AS mini-gw-internal-IMS
+FROM mini-gw-base AS mini-gw-internal-IMS
 
 # install dependancies
 #RUN apk add cmake build-base
@@ -90,7 +90,7 @@ RUN ["chmod", "+x", "./internal-message-entrypoint.sh"]
 #ENTRYPOINT ["sh", "./internal-message-entrypoint.sh"] 
 
 # ========== mini gateway internal  server ==========
-FROM mini_gw_base AS mini-gw-vendor-kakao
+FROM mini-gw-base AS mini-gw-vendor-kakao
 
 # install dependancies
 #RUN apk add cmake build-base
