@@ -11,6 +11,9 @@ extern "C"{
 
 #include "mini-gw-common.h"
 
+#include <bits/stdc++.h> 
+#include <boost/algorithm/string.hpp> 
+
 std::vector<std::pair<std::string, std::string>> parser(std::string message);
 
 #ifdef _cplusplus

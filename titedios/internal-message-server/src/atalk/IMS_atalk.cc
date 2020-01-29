@@ -1,6 +1,4 @@
 #include "IMS_atalk.h"
-#include <bits/stdc++.h> 
-#include <boost/algorithm/string.hpp> 
 
 using namespace std;
 using namespace web::http;
@@ -63,18 +61,16 @@ int IMS_ATALK::request_to_send_message(std::string message)
 	/// parsing
 	auto telegram = parser(message);
 
-#ifdef DEBUG
 	int test = 0;
 	for (auto const & i: telegram) {
-		std::cout << i.first << ":" << i.second << std::endl;
+		std::cout << COUT_PREFIX << i.first << ":" << i.second << std::endl;
 
 		msg_record[test].test = test;
-		std::cout << COUT_PREFIX << "The number of field: " << 
-			msg_record[test].test << std::endl;
-
 		++test;
 	}
-#endif		
+	/// check required field
+
+
 	/// enqueue to MMF
 
 
