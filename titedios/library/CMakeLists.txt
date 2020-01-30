@@ -9,7 +9,7 @@ endif()
 
 # default deriectory
 set (LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set (LIB_FILES ${LIB_SRC}/util-mmf.cc ${LIB_SRC}/parser.cc)
+set (LIB_FILES ${LIB_SRC}/util-mmf.cc ${LIB_SRC}/parser.cc ${LIB_SRC}/base64.cc)
 
 # header files
 include_directories (${CMAKE_CURRENT_SOURCE_DIR}/../include)
