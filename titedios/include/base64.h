@@ -1,4 +1,4 @@
-#ifndef __MINI_GW_BASE_64_H__ 
+#ifndef __MINI_GW_BASE_64_H__
 #define __MINI_GW_BASE_64_H__
 
 #include <stdlib.h>

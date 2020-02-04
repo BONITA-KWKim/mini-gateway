@@ -13,6 +13,7 @@ IMS_ATALK::IMS_ATALK (utility::string_t url) : m_listener (url)
 
 	/// MMF
 	util_mmf = new UTILMMF();
+	// msg_record = new MSG_RECORD();
 	msg_record = (MSG_RECORD *)util_mmf->attach_MMF(MMF_IDX_PTN,
 	                                                O_RDWR | O_CREAT, 
    	                                                MMF_PTN_FILENAME, 
@@ -20,6 +21,16 @@ IMS_ATALK::IMS_ATALK (utility::string_t url) : m_listener (url)
 			                                        MAX_PTN_RECORDS, 
 													0, 
                                                     0, NULL); // MMF
+	for (int k = 0; 100 > k; ++k) {
+		msg_record[k].status = IDLE;
+		memset (msg_record[k].key, 0x00, sizeof(msg_record[k].key));
+		memset (msg_record[k].subject, 0x00, sizeof(msg_record[k].subject));
+		memset (msg_record[k].receiver, 0x00, sizeof(msg_record[k].receiver));
+		memset (msg_record[k].sender_key, 0x00, sizeof(msg_record[k].sender_key));
+		memset (msg_record[k].tmpl_code, 0x00, sizeof(msg_record[k].tmpl_code));
+		memset (msg_record[k].nation_code, 0x00, sizeof(msg_record[k].nation_code));
+		memset (msg_record[k].msg_body, 0x00, sizeof(msg_record[k].msg_body));
+	} 	
 }
 
 void IMS_ATALK::handle_post (http_request message)
@@ -61,18 +72,37 @@ int IMS_ATALK::request_to_send_message(std::string message)
 	/// parsing
 	auto telegram = parser(message);
 
-	int test = 0;
 	for (auto const & i: telegram) {
 		std::cout << COUT_PREFIX << i.first << ":" << i.second << std::endl;
-
-		msg_record[test].test = test;
-		++test;
 	}
 	/// check required field
-
-
+/*
+    char key[20];
+    char subject[50];
+    char receiver[16];
+    char sender_key[30];
+    char tmpl_code[20];
+    char nation_code[4];
+    char msg_bodt[4000];
+*/
 	/// enqueue to MMF
+	for (int k = 0; 100 > k; ++k) {
+		std::cout << COUT_PREFIX << "index: " << k << 
+		" status: " << msg_record[0].status << std::endl;
 
+		if (IDLE == msg_record[k].status) {
+			for (auto const & i: telegram) {
+				if (0 == strcmp(i.first.c_str(), "KEY")) {
+					std::cout << COUT_PREFIX << "key: " << i.second.c_str() << std::endl;
+					memcpy (msg_record[k].key, i.second.c_str(), strlen(i.second.c_str()));
+				}
+			}
+			msg_record[k].status = TRANSMIT_REQUEST;
+			break;
+		}
+	} // for (int k = 0; 100 > k; ++k)
+
+	std::cout << COUT_PREFIX << "status: " << msg_record[0].status << " , key: " << msg_record[0].key << std::endl;
 
 	return 0;
 }

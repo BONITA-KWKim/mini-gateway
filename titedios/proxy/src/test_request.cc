@@ -30,17 +30,16 @@ int main(int argc, char* argv[])
 
         json::value json_telegram;
         json_telegram[U("message")] = json::value::string (U("KEY:a000000001\r\nEXTEND:\r\nSUBJECT:subject\r\nRECEIVER:01077770000\r\nSENDER:\r\n" \
-"SENDERKEY:1234abcd5678efgh\r\nTMPLCD:mts_test_0001\r\nNATIONCODE:82\r\nMDATA:MIME-Version: 1.0\r\n" \
-"MDATA:Content-Type: multipart/mixed;boundary=\"----=_NextPart_000_0049_01C851E9.827BA430\"\r\n" \
-"MDATA:\r\nMDATA:------=_NextPart_000_0049_01C851E9.827BA430\r\n" \
-"MDATA:Content-Type: TXT;charset=\"ks_c_5601-1987\"\r\nMDATA:Content-Transfer-Encoding: base64\r\n" \
+"SENDERKEY:1234abcd5678efgh\r\nTMPLCD:mts_test_0001\r\nNATIONCODE:82\r\n"
+"MDATA:MIME-Version: 1.0\r\n" \
+"MDATA:Content-Type: multipart/mixed;boundary=\"----=_NextPart_000_0049_01C851E9.827BA430\"\r\nMDATA:\r\n" 
+"MDATA:------=_NextPart_000_0049_01C851E9.827BA430\r\n" 
+"MDATA:Content-Type: TXT;charset=\"ks_c_5601-1987\"\r\n"
+"MDATA:Content-Transfer-Encoding: base64\r\n" \
 "MDATA:Content-Svc: ALL;\r\nMDATA:\r\n" \
-"MDATA:bWFpbA0KDQoNCqahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGm\r\n" \
-"MDATA:oaahpqEgICANCktza3lCDQqws7nfxsAgsejAur+1IC8gwvfA5SAgIA0KRW1haWwgOiBqb2xpQGtz\r\n" \
-"MDATA:a3liLmNvbQ0KwPzIrSA6IDA3MC03MDE2LTk5ODMgIMbRvbogOiAwMi01NjUtOTQ2Nw0KSC5QIDog\r\n" \
-"MDATA:MDE5LTI3MC03OTE4DQqmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGmoaahpqGm\r\n" \
-"MDATA:oaahpqGmoaah\r\nMDATA:\r\nMDATA:------=_NextPart_000_0049_01C851E9.827BA430\r\n" \
-"MDATA:\r\nEND\r\n"));
+"MDATA:7JWI64WV7ZWY7IS47JqULiDsubTsubTsmKQg7JWM66a87Yah7J6F64uI64ukLiBIaSwgVGhpcyBpcyBLYWthbyBBbGltdGFsayBzZXJ2aWNlLg==\r\nMDATA:\r\n" \
+"MDATA:------=_NextPart_000_0049_01C851E9.827BA430\r\nMDATA:\r\n"
+"END\r\n"));
 
 
         http_request req(methods::POST);
